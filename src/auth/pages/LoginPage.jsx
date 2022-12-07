@@ -9,6 +9,11 @@ import { Google } from "@mui/icons-material";
 import { AuthLayuout } from "../layout/AuthLayuout";
 import { useMemo } from "react";
 
+const fromData = {
+  email: '',
+  password: ''
+}
+
 
 export const LoginPage = () => {
 
@@ -16,10 +21,7 @@ export const LoginPage = () => {
 
   const dispatch = useDispatch();
 
-  const { formState ,email, password, onInputChange } = useForm({
-    email: '',
-    password: ''
-  });
+  const { formState ,email, password, onInputChange } = useForm(fromData);
 
   const isAuthenticating = useMemo(()=> status === 'authenticated', [status])
 
@@ -69,8 +71,7 @@ export const LoginPage = () => {
               />
             </Grid>
 
-            <Grid 
-                item 
+            <Grid item 
                 xs={12}
                 sx = {{mt:1}}
                 display = { !!errorMessage ? '' : 'none' }
@@ -85,10 +86,12 @@ export const LoginPage = () => {
               <Grid item xs={12} sm ={6}>
 
                 <Button 
+                  sx ={{backgroundColor: 'secundary.main'}}
                   disabled = { isAuthenticating }
                   type = 'submit' 
                   variant = 'contained' 
                   fullWidth 
+                 
                 >
                     Login
                 </Button>

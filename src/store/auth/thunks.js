@@ -1,4 +1,6 @@
 import { loginWithEmailPassword, logoutFirebase, registerUserWithEmailPassword, signInWithGoogle } from "../../firebase/providers";
+import { fileUpload } from "../../helpers";
+import { setPhotosToActiveNote, setSaving } from "../journal";
 import { chekingCredentials, login, logout } from "./authSlice";
 
 export const chekingAuthentication = ( email, password ) =>{
@@ -46,7 +48,7 @@ export const startLoginWithEmailPassword = ({email, password})=>{
         
         dispatch( login({ uid, displayName, email, photoURL }) )
         
-    }
+    };
 };
 
 export const startLogout = ()=>{
@@ -56,5 +58,22 @@ export const startLogout = ()=>{
 
         dispatch( logout() );
 
-    }
-}
+    };
+};
+
+export const startUploadingFiles = ( files= [] )=>{
+   return async (dispatch)=>{
+
+        dispatch( setSaving() );
+    
+        const fileUploadPromises = [];
+        
+        for (const file of files) {
+            fileUploadPromises.push( fileUpload( file ) );
+        };
+
+        const photosUrls = await Promise.all( fileUploadPromises )
+
+        dispatch( setPhotosToActiveNote( photosUrls ) )
+    };
+};
